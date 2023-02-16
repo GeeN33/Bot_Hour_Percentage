@@ -41,7 +41,7 @@ def f2():
 if __name__ == '__main__':
 
     f()
-    f2()
+    # f2()
     t1.start()
     t1.join()
 
