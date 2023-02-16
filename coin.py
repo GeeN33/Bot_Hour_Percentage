@@ -22,8 +22,10 @@ class Coin():
         self.start_btc = False
         self.start_eth = False
         self.alerts_f = True
+        self.work_active = False
 
     def add_bar_all(self):
+        self.work_active = False
         if self.start_btc and self.start_eth:
             if len(self.bars_btc) > 59:
                 self.bars_btc.pop(0)
@@ -44,6 +46,7 @@ class Coin():
                 self.bars_eth.append(Bar(last))
 
     def trade(self,  symbol, last, date):
+        self.work_active = True
         self.date = datetime.fromtimestamp(date/1000)
 
         self.add_bar_btc(symbol, last)

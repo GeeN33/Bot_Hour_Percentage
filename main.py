@@ -14,11 +14,18 @@ coin = Coin(symbol_btc, symbol_eth, percentage_difference)
 
 socket = WebSocket(coin)
 
+t1 = threading.Thread(target=socket.websocket_run, daemon=True)
+
 def f():
   threading.Timer(60.0, f).start()
   if socket.connected:
-      coin.add_bar_all()
+      if not coin.work_active:
+          socket.websocket_restart()
+      #     print('websocket_restart')
       # print('=' * 10)
+      # print('work_active: ', coin.work_active)
+      coin.add_bar_all()
+
       # print(coin.date)
       # print(coin.percent_btc)
       # print(coin.percent_eth)
@@ -32,12 +39,9 @@ def f2():
       tele_bot.runbot(coin)
 
 if __name__ == '__main__':
-    print(datetime.fromtimestamp(1676483943492/1000))
-
 
     f()
     f2()
-    t1 = threading.Thread(target=socket.websocket_run, daemon=True)
     t1.start()
     t1.join()
 

@@ -66,11 +66,15 @@ def parsing(data, coin:Coin):
                 else:
                     send_message(m.chat_id, "пока ничего нет")
             elif m.text == '/last':
-                strrez = f'BTC last price: {coin.last_btc}\n'
+                strrez = f'date: {coin.date}\n'
+                strrez += f'work_active: {coin.work_active}\n'
+                strrez += f'BTC last price: {coin.last_btc}\n'
                 strrez += f'ETH last price: {coin.last_eth}\n'
                 send_message(m.chat_id, strrez)
             elif m.text == '/diff':
-                strrez = f'percentage_difference: {coin.percentage_difference_last}\n'
+                strrez = f'date: {coin.date}\n'
+                strrez += f'work_active: {coin.work_active}\n'
+                strrez += f'percentage_difference: {coin.percentage_difference_last}\n'
                 strrez += f'percentage_difference_max: {coin.percentage_difference_max}\n'
                 send_message(m.chat_id, strrez)
 

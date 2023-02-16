@@ -7,6 +7,11 @@ class WebSocket():
     def __init__(self, coin:Coin):
       self.coin = coin
       self.connected = False
+      self.ws = websocket.WebSocketApp(
+          "wss://fstream.binance.com/stream?streams=" + self.coin.symbol_btc + "@aggTrade/" + self.coin.symbol_eth + "@aggTrade",
+          on_message=self.on_message,
+          on_error=self.on_error,
+          on_close=self.on_close)
 
     def on_message(self, ws, message):
         data = json.loads(message)
@@ -26,11 +31,14 @@ class WebSocket():
         self.connected = True
         print("### connected ###")
 
-    def websocket_run(self):
-        ws = websocket.WebSocketApp("wss://fstream.binance.com/stream?streams="+self.coin.symbol_btc+"@aggTrade/"+self.coin.symbol_eth+"@aggTrade",
-          on_message = self.on_message,
-          on_error = self.on_error,
-          on_close = self.on_close)
+    def websocket_restart(self):
+        try:
+            self.ws.on_close = self.on_close
+            self.ws.on_open = self.on_open
+            self.ws.run_forever()
+        except Exception:
+            print('#### error ####')
 
-        ws.on_open = self.on_open
-        ws.run_forever()
+    def websocket_run(self):
+        self.ws.on_open = self.on_open
+        self.ws.run_forever()
